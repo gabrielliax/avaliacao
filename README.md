@@ -26,4 +26,6 @@ PRIMARY KEY (codigo)
 
 SELECT * FROM TAB_HIERARQUIA;
 
+Configurar seu usuario e senha para conectar com o banco de dados.
+
 
