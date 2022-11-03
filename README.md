@@ -10,3 +10,20 @@ com o seguinte corpo:
 }
 
 Para gravar no banco de dados
+
+Executar o seguinte script no seu SGBD: 
+
+CREATE DATABASE AVALIACAO;
+
+CREATE TABLE TAB_HIERARQUIA(
+
+codigo int (1) AUTO_INCREMENT,
+nome varchar (30) not null,
+profundidade int (3),
+tipo varchar (10),
+PRIMARY KEY (codigo) 
+);
+
+SELECT * FROM TAB_HIERARQUIA;
+
+
