@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.annotation.ManagedBean;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -21,7 +19,7 @@ public class DiretorioTeste {
 
 	@Autowired
 	private ArquivoDiretorioRepository arquivoDiretorioRepository;
-	
+
 	public File lerCaminho(String caminhoS) {
 
 		File caminho = new File(caminhoS);
@@ -41,22 +39,23 @@ public class DiretorioTeste {
 	public void criarHirarquia(File caminho, int profundidade) {
 
 		File listaArquivos[] = caminho.listFiles();
-		
-		//comparar a profundidade inserida com a ultima que foi cadastrada, e não com o grau 
-		if (profundidade > ultimaHierarquiaConsultada || ultimaHierarquiaConsultada == 0) {			
+
+		if (profundidade > ultimaHierarquiaConsultada || ultimaHierarquiaConsultada == 0) {
 			if (grau <= profundidade) {
 				if (listaArquivos != null) {
 					for (File arquivo : listaArquivos) {
 						if (arquivo.isDirectory()) {
-							ArquivoDiretorio arquivoDiretorio = new ArquivoDiretorio(arquivo.getName(), grau, "Diretorio");
+							ArquivoDiretorio arquivoDiretorio = new ArquivoDiretorio(arquivo.getName(), grau,
+									"Diretorio");
 							arquivoDiretorioRepository.save(arquivoDiretorio);
-							
+
 							System.out.println(calculaGrau(grau) + arquivo.getName() + "(Diretório)");
 							grau++;
 							criarHirarquia(arquivo, profundidade);
 
 						} else {
-							ArquivoDiretorio arquivoDiretorio = new ArquivoDiretorio(arquivo.getName(), grau, "Arquivo");
+							ArquivoDiretorio arquivoDiretorio = new ArquivoDiretorio(arquivo.getName(), grau,
+									"Arquivo");
 							arquivoDiretorioRepository.save(arquivoDiretorio);
 							System.out.println(calculaGrau(grau) + arquivo.getName().toString() + " (Arquivo)");
 						}
@@ -66,6 +65,10 @@ public class DiretorioTeste {
 			grau--;
 		} else {
 			List<ArquivoDiretorio> arquivosDiretorios = arquivoDiretorioRepository.findByProfundidade(profundidade);
+			for (ArquivoDiretorio arquivoDiretorio : arquivosDiretorios) {
+				System.out.println(calculaGrau(arquivoDiretorio.getProfundidade()) + arquivoDiretorio.getNome()
+						+ arquivoDiretorio.getTipo());
+			}
 		}
 	}
 
@@ -82,18 +85,15 @@ public class DiretorioTeste {
 	}
 
 	public void metodoPrincipal(String caminho2, Integer profundidade2) {
-		
-		//while deveria ficar aqui 
+
 		File caminho = lerCaminho(caminho2);
-		
-		if(profundidade2 > ultimaHierarquiaConsultada) {
+
+		if (profundidade2 > ultimaHierarquiaConsultada) {
 			arquivoDiretorioRepository.deleteAll();
 		}
-		criarHirarquia(caminho, profundidade2); 
-		//depois que acaba a logica, sobrepoem a ultima hierarquia consultada
+		criarHirarquia(caminho, profundidade2);
 		this.ultimaHierarquiaConsultada = profundidade2;
 		this.grau = 1;
-		
 
 	}
 
